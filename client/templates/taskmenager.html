@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="../styles/style.css">
+</head>
+<body>
+    <div class="container">
+        <section class="sidebar">
+            <ul>
+                <li class="sidebar-icon">
+                    <img src="../assets/icons/process.svg" alt="">
+                </li>
+                <li class="sidebar-icon">
+                    <a href="./osresourses.html">
+                        <img src="../assets//icons/resourses.svg" alt="">
+                    </a>
+                </li>
+            </ul>
+        </section>
+        <div class="container__content">
+            <header class="header">
+                <h2>Процессы</h2>
+            </header>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>PID</th>
+                        <th>Процесс</th>
+                        <th>CPU (%)</th>
+                        <th>Оперативка (%)</th>
+                    </tr>
+                </thead>
+                <tbody id="processTableBody"></tbody>
+            </table>
+        </div>
+    </div>
+    
+    <script src="qrc:///qtwebchannel/qwebchannel.js"></script>
+
+    <script>
+        new QWebChannel(qt.webChannelTransport, function(channel) {
+            window.processInfo = channel.objects.process_info;
+            console.log(window.processInfo);  
+        });
+
+        function updateProcessInfo(processes) {
+            const tableBody = document.getElementById("processTableBody");
+            tableBody.innerHTML = "";
+        
+            processes.forEach(process => {
+                const row = document.createElement("tr");
+        
+                row.innerHTML = `
+                    <td><div class="cell-content"><p class="pid-color">${process.pid}</p></div></td>
+                    <td><div class="cell-content"><p class="name-color">${process.name}</p></div></td>
+                    <td><div class="cell-content"><p class="cpu-color">${process.cpu_percent}</p></div></td>
+                    <td><div class="cell-content"><p class="memory-color">${process.memory_percent}</p></div></td>
+                `;
+        
+                row.addEventListener("click", () => {
+                    if (confirm(`Вы уверены, что хотите завершить процесс ${process.name} (PID: ${process.pid})?`)) {
+                        killProcess(process.pid).then(() => {
+                            alert(`Процесс ${process.name} завершён успешно.`);
+                        }).catch(() => {
+                            alert(`Не удалось завершить процесс ${process.name}.`);
+                        });
+                    }
+                });
+        
+                tableBody.appendChild(row);
+            });
+        }
+~
+        function killProcess(pid) {
+            return new Promise((resolve, reject) => {
+                window.processInfo.killProcess(pid, function(success) {
+                    if (success) {
+                        resolve(true);
+                    } else {
+                        reject(false);
+                    }
+                });
+            });
+        }
+    </script>
+
+    
+    
+</body>
+</html>

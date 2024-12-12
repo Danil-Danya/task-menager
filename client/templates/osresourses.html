@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="../styles/style.css">
+</head>
+<body>
+    <div class="container">
+        <section class="sidebar">
+            <ul>
+                <li class="sidebar-icon">
+                    <a href="./taskmenager.html">
+                        <img src="../assets/icons/resourses.svg" alt="">
+                    </a>
+                </li>
+                <li class="sidebar-icon">
+                    <img src="../assets/icons/process.svg" alt="">
+                </li>
+            </ul>
+        </section>
+        <div class="container__content">
+            <header class="header">
+                <h2>Ресурсы</h2>
+            </header>
+            <div class="content__block">
+                <div class="block-item">
+                    <img class="monitoring" src="../assets/images/cpu.png" alt="">
+                    <h2 class="text">Использование центрального процессора</h2>
+                    <h2 id="cpu-usage">29%</h2>
+                </div>
+                <div class="block-item">
+                    <img class="monitoring" src="../assets/images/ram.png" alt=""> 
+                    <h2 class="text">Использование памяти</h2>
+                    <h2 id="memory-usage">Memory Usage: N/A</h2> 
+                </div>
+                <div class="block-item">
+                    <img class="monitoring" src="../assets/images/gpu.png" alt="">
+                    <h2 class="text">Информация о GPU</h2>
+                    <div id="gpu-info">GPU Info: N/A</div> 
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function updateCPUUsage(cpuUsage) {
+            document.getElementById("cpu-usage").innerText = ` ${cpuUsage}%`;
+        }
+
+        function updateMemoryUsage(totalMemory, usedMemory, freeMemory, memoryPercent) {
+            document.getElementById("memory-usage").innerText = ` ${usedMemory.toFixed(2)} GB of ${totalMemory.toFixed(2)} GB (Free: ${freeMemory.toFixed(2)} GB) - ${memoryPercent}%`;
+        }
+
+        function updateGPUInfo(gpuInfo) {
+            let gpuData = "";
+            gpuInfo.forEach(gpu => {
+                gpuData += `<p>GPU: ${gpu.name} - Utilization: ${gpu.gpu_util}% - Temperature: ${gpu.temperature}°C</p>`;
+            });
+            document.getElementById("gpu-info").innerHTML = gpuData;
+        }
+
+        function updateAllData(cpuUsage, memoryUsage, gpuInfo) {
+            updateCPUUsage(cpuUsage);
+            updateMemoryUsage(memoryUsage.totalMemory, memoryUsage.usedMemory, memoryUsage.freeMemory, memoryUsage.memoryPercent);
+            updateGPUInfo(gpuInfo);
+        }
+    </script>
+</body>
+</html>
