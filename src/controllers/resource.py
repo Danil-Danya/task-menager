@@ -67,6 +67,17 @@ class Resources(QObject):
 
         return total_memory, used_memory, memory_percent
 
+    @Slot()
+    def get_network_usage(self):
+        network_io = psutil.net_io_counters()
+        upload_speed = (network_io.bytes_sent * 8) / (1024 ** 2) 
+        download_speed = (network_io.bytes_recv * 8) / (1024 ** 2)  
+
+        return {
+            "upload_mbps": upload_speed,
+            "download_mbps": download_speed
+        }
+
     def __del__(self):
         pynvml.nvmlShutdown()
 

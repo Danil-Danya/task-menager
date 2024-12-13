@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Task Manager</title>
     <link rel="stylesheet" href="../styles/style.css">
 </head>
 <body>
@@ -12,11 +12,11 @@
             <ul>
                 <li class="sidebar-icon">
                     <a href="./taskmenager.html">
-                        <img src="../assets/icons/resourses.svg" alt="">
+                        <img src="../assets/icons/resourses.svg" alt="Resources">
                     </a>
                 </li>
                 <li class="sidebar-icon">
-                    <img src="../assets/icons/process.svg" alt="">
+                    <img src="../assets/icons/process.svg" alt="Processes">
                 </li>
             </ul>
         </section>
@@ -26,19 +26,24 @@
             </header>
             <div class="content__block">
                 <div class="block-item">
-                    <img class="monitoring" src="../assets/images/cpu.png" alt="">
+                    <img class="monitoring" src="../assets/images/cpu.png" alt="CPU">
                     <h2 class="text">Использование центрального процессора</h2>
-                    <h2 id="cpu-usage">29%</h2>
+                    <h2 id="cpu-usage">N/A%</h2>
                 </div>
                 <div class="block-item">
-                    <img class="monitoring" src="../assets/images/ram.png" alt=""> 
+                    <img class="monitoring" src="../assets/images/ram.png" alt="RAM"> 
                     <h2 class="text">Использование памяти</h2>
                     <h2 id="memory-usage">Memory Usage: N/A</h2> 
                 </div>
                 <div class="block-item">
-                    <img class="monitoring" src="../assets/images/gpu.png" alt="">
+                    <img class="monitoring" src="../assets/images/gpu.png" alt="GPU">
                     <h2 class="text">Информация о GPU</h2>
                     <div id="gpu-info">GPU Info: N/A</div> 
+                </div>
+                <div class="block-item">
+                    <img class="monitoring" src="../assets/images/network.png" alt="Network">
+                    <h2 class="text">Сетевой трафик</h2>
+                    <h2 id="network-usage">Upload: N/A Mbps, Download: N/A Mbps</h2>
                 </div>
             </div>
         </div>
@@ -46,11 +51,12 @@
 
     <script>
         function updateCPUUsage(cpuUsage) {
-            document.getElementById("cpu-usage").innerText = ` ${cpuUsage}%`;
+            document.getElementById("cpu-usage").innerText = `${cpuUsage}%`;
         }
 
         function updateMemoryUsage(totalMemory, usedMemory, freeMemory, memoryPercent) {
-            document.getElementById("memory-usage").innerText = ` ${usedMemory.toFixed(2)} GB of ${totalMemory.toFixed(2)} GB (Free: ${freeMemory.toFixed(2)} GB) - ${memoryPercent}%`;
+            document.getElementById("memory-usage").innerText = 
+                `${usedMemory.toFixed(2)} GB of ${totalMemory.toFixed(2)} GB (Free: ${freeMemory.toFixed(2)} GB) - ${memoryPercent}%`;
         }
 
         function updateGPUInfo(gpuInfo) {
@@ -61,11 +67,18 @@
             document.getElementById("gpu-info").innerHTML = gpuData;
         }
 
-        function updateAllData(cpuUsage, memoryUsage, gpuInfo) {
+        function updateNetworkUsage(uploadSpeed, downloadSpeed) {
+            document.getElementById("network-usage").innerText = 
+                `Upload: ${uploadSpeed.toFixed(2)} Mbps, Download: ${downloadSpeed.toFixed(2)} Mbps`;
+        }
+
+        function updateAllData(cpuUsage, memoryUsage, gpuInfo, networkUsage) {
             updateCPUUsage(cpuUsage);
             updateMemoryUsage(memoryUsage.totalMemory, memoryUsage.usedMemory, memoryUsage.freeMemory, memoryUsage.memoryPercent);
             updateGPUInfo(gpuInfo);
+            updateNetworkUsage(networkUsage.upload_mbps, networkUsage.download_mbps);
         }
     </script>
 </body>
 </html>
+
